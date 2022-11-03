@@ -1,7 +1,9 @@
 <?php
     include('scripts.php');
 ?>
-
+<?php
+		
+?>
 <!DOCTYPE html>
 <html lang="en" >
 <head>
@@ -255,7 +257,7 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">To do (<span id="to-do-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">To do <span id="to-do-tasks-count"></span></h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -268,14 +270,16 @@
 							<?php
 								//PHP CODE HERE
 								//DATA FROM getTasks() FUNCTION
+								getTasks(1);
 							?>
+							
 						</div>
 					</div>
 				</div>
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">In Progress (<span id="in-progress-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">In Progress <span id="in-progress-tasks-count"></span></h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -288,6 +292,7 @@
 							<?php
 								//PHP CODE HERE
 								//DATA FROM getTasks() FUNCTION
+								getTasks(2);
 							?>
 						</div>
 					</div>
@@ -295,7 +300,7 @@
 				<div class="col-xl-4 col-lg-6">
 					<div class="panel panel-inverse">
 						<div class="panel-heading">
-							<h4 class="panel-title">Done (<span id="done-tasks-count">0</span>)</h4>
+							<h4 class="panel-title">Done <span id="done-tasks-count"></span></h4>
 							<div class="panel-heading-btn">
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-default" data-toggle="panel-expand"><i class="fa fa-expand"></i></a>
 								<a href="javascript:;" class="btn btn-xs btn-icon btn-success" data-toggle="panel-reload"><i class="fa fa-redo"></i></a>
@@ -308,7 +313,10 @@
 							<?php
 								//PHP CODE HERE
 								//DATA FROM getTasks() FUNCTION
+								getTasks(3);
+							
 							?>
+						
 						</div>
 					</div>
 				</div>
@@ -334,20 +342,20 @@
 					</div>
 					<div class="modal-body">
 							<!-- This Input Allows Storing Task Index  -->
-							<input type="hidden" id="task-id">
+							<input type="hidden" id="task-id" name="task_id">
 							<div class="mb-3">
 								<label class="form-label">Title</label>
-								<input type="text" class="form-control" id="task-title"/>
+								<input type="text" class="form-control" id="task-title" name="title"/>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Type</label>
 								<div class="ms-3">
 									<div class="form-check mb-1">
-										<input class="form-check-input" name="task-type" type="radio" value="Feature" id="task-type-feature"/>
+										<input class="form-check-input" name="task_type" type="radio" value="1" id="task-type-feature"/>
 										<label class="form-check-label" for="task-type-feature">Feature</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" name="task-type" type="radio" value="Bug" id="task-type-bug"/>
+										<input class="form-check-input" name="task_type" type="radio" value="2" id="task-type-bug"/>
 										<label class="form-check-label" for="task-type-bug">Bug</label>
 									</div>
 								</div>
@@ -355,30 +363,30 @@
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Priority</label>
-								<select class="form-select" id="task-priority">
-									<option value="">Please select</option>
-									<option value="Low">Low</option>
-									<option value="Medium">Medium</option>
-									<option value="High">High</option>
-									<option value="Critical">Critical</option>
+								<select class="form-select" id="task-priority" name="priority">
+									<!--<option value="">Please select</option>-->
+									<option value="1">Low</option>
+									<option value="2">Medium</option>
+									<option value="3">High</option>
+									<option value="4">Critical</option>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Status</label>
-								<select class="form-select" id="task-status">
-									<option value="">Please select</option>
-									<option value="To Do">To Do</option>
-									<option value="In Progress">In Progress</option>
-									<option value="Done">Done</option>
+								<select class="form-select" id="task-status" name="status">
+									<!--<option value="">Please select</option>-->
+									<option value="1">To Do</option>
+									<option value="2">In Progress</option>
+									<option value="3">Done</option>
 								</select>
 							</div>
 							<div class="mb-3">
 								<label class="form-label">Date</label>
-								<input type="date" class="form-control" id="task-date"/>
+								<input type="datetime-local" class="form-control" id="task-date" name="date"/>
 							</div>
 							<div class="mb-0">
 								<label class="form-label">Description</label>
-								<textarea class="form-control" rows="10" id="task-description"></textarea>
+								<textarea class="form-control" rows="10" id="task-description" name="description"></textarea>
 							</div>
 						
 					</div>
@@ -398,9 +406,31 @@
 	<script src="assets/js/app.min.js"></script>
 	<!-- ================== END core-js ================== -->
 	<script src="scripts.js"></script>
-
 	<script>
-		//reloadTasks();
+		function edit(element)
+		{
+			
+			let parent = element.parentElement.parentElement.parentElement.children;
+			console.log(parent)
+			let li_parent_id = element.parentElement.parentElement.parentElement.parentElement.getAttribute("id");
+			let status_id =element.parentElement.parentElement.parentElement.getAttribute("id");
+			console.log(status_id)
+    		let title_text=parent[0].textContent;
+    		let date_text=parent[1].children[0].children[0].textContent;
+    		let description_text=parent[1].children[1].textContent;
+			let priority_id=parent[2].children[0].children[0].getAttribute("id");
+			let type_id=parent[2].children[0].children[1].getAttribute("id");
+			// get  form
+			let form = document.forms['form-task'];
+			form.title.value = title_text;
+			form.task_type.value = type_id;
+			form.priority.value = priority_id;
+			form.status.value = status_id;
+			form.date.value = date_text;
+			form.description.value = description_text;
+			form.task_id.value = li_parent_id;
+			console.log(form.task_id.value)
+		}
 	</script>
 </body>
 </html>
